@@ -3,12 +3,29 @@ import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import { GET } from "../api/auth/[...nextauth]/route";
 
+interface Session {
+  user?: {
+    email?: string;
+  };
+}
+
 const AuthCheck = async ({ children }: { children: ReactNode }) => {
-  const session = await getServerSession(GET);
+  const session = await getServerSession(GET) as Session | null;
+  
   if (!session) {
-    redirect("/api/auth/signin/google");
+    redirect("/admin/signin");
     return null;
   }
+
+  // Check if the user's email matches the allowed admin email
+  const allowedEmail = process.env.ADMIN_EMAIL || "jlescarlan11@gmail.com";
+  const userEmail = session.user?.email;
+  
+  if (!userEmail || userEmail.toLowerCase() !== allowedEmail.toLowerCase()) {
+    redirect("/admin/signin");
+    return null;
+  }
+
   return <>{children}</>;
 };
 
