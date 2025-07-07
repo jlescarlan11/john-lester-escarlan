@@ -1,10 +1,11 @@
-import React from 'react'
-import Link from 'next/link'
-import Breadcrumbs from '../_components/Breadcrumbs'
+import Breadcrumbs from "../_components/Breadcrumbs";
+import Link from "next/link";
+import AuthCheck from "./AuthCheck";
+import SignOutButton from "../_components/SignOutButton";
 
 const AdminPage = () => {
   return (
-    <>
+    <AuthCheck>
       <Breadcrumbs />
       <div className="mb-6">
         <Link
@@ -15,8 +16,9 @@ const AdminPage = () => {
         </Link>
       </div>
       <div>AdminPage</div>
-    </>
-  )
-}
+      <SignOutButton className="btn btn-ghost justify-start h-11 w-full text-base" />
+    </AuthCheck>
+  );
+};
 
-export default AdminPage
+export default AdminPage;
