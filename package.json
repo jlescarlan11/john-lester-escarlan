@@ -10,11 +10,17 @@
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",
+    "@supabase/supabase-js": "^2.50.3",
+    "@types/formidable": "^3.4.5",
+    "axios": "^1.6.8",
     "daisyui": "^5.0.46",
+    "formidable": "^3.5.4",
     "next": "15.3.5",
+    "next-auth": "^4.24.11",
     "prisma": "^6.11.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
     "zod": "^3.25.74"
   },
   "devDependencies": {

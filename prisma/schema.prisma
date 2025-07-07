@@ -19,10 +19,10 @@ model Project {
   description String   @db.VarChar(255)
   technology  String[]
   link        String
-  isFeatured  Boolean  @default(false) @map("isfeatured")
+  isFeatured  Boolean  @default(false) @map("is_featured")
   preview     String? // for the image URL
-  createdAt   DateTime @default(now()) @map("createdat")
-  updatedAt   DateTime @updatedAt @map("updatedat")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
-  @@map("project")
+  @@map("portfolio_project")
 }
