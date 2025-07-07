@@ -12,3 +12,17 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String   @db.VarChar(55)
+  description String   @db.VarChar(255)
+  technology  String[]
+  link        String
+  isFeatured  Boolean  @default(false) @map("isfeatured")
+  preview     String? // for the image URL
+  createdAt   DateTime @default(now()) @map("createdat")
+  updatedAt   DateTime @updatedAt @map("updatedat")
+
+  @@map("project")
+}
