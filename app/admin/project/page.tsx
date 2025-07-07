@@ -5,7 +5,8 @@ import EditProjectModal from "./EditProjectModal";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import axios from "axios";
 import { useToast } from "../../_components/ToastContext";
-import Breadcrumbs from '../../_components/Breadcrumbs';
+import Breadcrumbs from "../../_components/Breadcrumbs";
+import SearchInput from "../../_components/SearchInput";
 
 interface Project {
   id: string;
@@ -29,6 +30,7 @@ const ProjectPageClient = () => {
   const [loading, setLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const { showToast } = useToast();
+  const [search, setSearch] = useState("");
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -62,7 +64,7 @@ const ProjectPageClient = () => {
         showToast("error", "Failed to fetch projects");
       }
     } catch (err) {
-      console.log('fetchProjects error:', err);
+      console.log("fetchProjects error:", err);
       showToast("error", "Failed to load projects");
     } finally {
       setLoading(false);
@@ -77,9 +79,14 @@ const ProjectPageClient = () => {
       const response = await axios.delete(`/api/project/${projectToDelete.id}`);
       const result = response.data;
       if (result.success) {
-        setProjects(projects.filter(project => project.id !== projectToDelete.id));
+        setProjects(
+          projects.filter((project) => project.id !== projectToDelete.id)
+        );
         closeDeleteModal();
-        showToast("success", `Project "${projectToDelete.title}" deleted successfully`);
+        showToast(
+          "success",
+          `Project "${projectToDelete.title}" deleted successfully`
+        );
       } else {
         showToast("error", "Failed to delete project");
       }
@@ -107,14 +114,30 @@ const ProjectPageClient = () => {
     showToast("success", "Projects loaded successfully");
   };
 
+  // Filter projects by search term (case-insensitive, matches title)
+  const filteredProjects = projects.filter((project) =>
+    project.title.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="space-y-4">
       <Breadcrumbs />
-      <div className="flex justify-between items-center gap-2">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
         <h1 className="text-2xl font-bold">Project Management</h1>
-        <button className="btn btn-primary" onClick={openModal} disabled={loading}>
-          Add New Project
-        </button>
+        <div className="flex gap-2 w-full justify-between sm:w-auto">
+          <SearchInput
+            value={search}
+            onChange={setSearch}
+            placeholder="Search projects..."
+          />
+          <button
+            className="btn btn-primary"
+            onClick={openModal}
+            disabled={loading}
+          >
+            Add New Project
+          </button>
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="table">
@@ -127,7 +150,7 @@ const ProjectPageClient = () => {
             </tr>
           </thead>
           <tbody>
-            {projects.map((project, index) => (
+            {filteredProjects.map((project, index) => (
               <tr key={project.id}>
                 <th>{index + 1}</th>
                 <td className="font-medium">{project.title}</td>
@@ -159,10 +182,10 @@ const ProjectPageClient = () => {
           </tbody>
         </table>
       </div>
-      {!loading && projects.length === 0 && (
+      {!loading && filteredProjects.length === 0 && (
         <div className="text-center py-8">
           <p className="text-base-content/40">
-            No projects found. Add your first project!
+            No projects found. Try a different search or add your first project!
           </p>
         </div>
       )}
@@ -171,8 +194,8 @@ const ProjectPageClient = () => {
         onClose={closeModal}
         onProjectAdded={handleProjectAdded}
       />
-      <EditProjectModal 
-        open={editModalOpen} 
+      <EditProjectModal
+        open={editModalOpen}
         onClose={closeEditModal}
         project={selectedProject}
         onProjectUpdated={handleProjectUpdated}
