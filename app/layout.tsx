@@ -51,7 +51,7 @@ export default function RootLayout({
       >
         <AuthProvider>
           <ToastProvider>
-            <main className="min-h-dvh container max-w-7xl mx-auto">
+            <main className="min-h-dvh container max-w-7xl mx-auto py-8 px-4">
               {children}
             </main>
             <ToastContainer />

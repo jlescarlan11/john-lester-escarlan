@@ -1,6 +1,9 @@
+import Layout from "./_components/layout/Layout";
 
 export default function Home() {
   return (
-   <div>Hello World</div>
+    <>
+      <Layout />
+    </>
   );
 }
