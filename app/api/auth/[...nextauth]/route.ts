@@ -14,10 +14,13 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
+  pages: {
+    error: "/auth/error",
+  },
   callbacks: {
     async signIn({ user }) {
       // Check if the user's email matches the allowed admin email
-      const allowedEmail = process.env.ADMIN_EMAIL || "jlescarlan11@gmail.com";
+      const allowedEmail = process.env.ADMIN_EMAIL!;
       if (user.email?.toLowerCase() === allowedEmail.toLowerCase()) {
         return true;
       }

@@ -3,20 +3,27 @@
 import { signOut } from "next-auth/react";
 import React from "react";
 
-interface SignOutButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface SignOutButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
 }
 
-const SignOutButton: React.FC<SignOutButtonProps> = ({ children = "Log Out", ...props }) => {
+const SignOutButton: React.FC<SignOutButtonProps> = ({
+  children = "Log Out",
+  ...props
+}) => {
   return (
-    <button
-      type="button"
-      onClick={() => signOut({ callbackUrl: "/" })}
-      {...props}
-    >
-      {children}
-    </button>
+    <div>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={() => signOut({ callbackUrl: "/" })}
+        {...props}
+      >
+        {children}
+      </button>
+    </div>
   );
 };
 
-export default SignOutButton; 
+export default SignOutButton;

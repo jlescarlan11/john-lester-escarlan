@@ -15,7 +15,8 @@ const SigninPage = () => {
     if (status === "loading") return;
 
     if (session) {
-      const allowedEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "jlescarlan11@gmail.com";
+      const allowedEmail =
+        process.env.NEXT_PUBLIC_ADMIN_EMAIL || "11@gmail.com";
       const userEmail = session.user?.email;
 
       if (userEmail && userEmail.toLowerCase() !== allowedEmail.toLowerCase()) {
@@ -25,7 +26,10 @@ const SigninPage = () => {
         );
         // Sign out the unauthorized user
         router.push("/api/auth/signout");
-      } else if (userEmail && userEmail.toLowerCase() === allowedEmail.toLowerCase()) {
+      } else if (
+        userEmail &&
+        userEmail.toLowerCase() === allowedEmail.toLowerCase()
+      ) {
         // Authorized user, redirect to admin
         router.push("/admin");
       }
@@ -33,27 +37,16 @@ const SigninPage = () => {
   }, [session, status, router, showToast]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
+    <div className="min-h-dvh flex items-center justify-center ">
+      <div className="max-w-md w-full space-y-8 p-8  bg-base-200 rounded-lg shadow-md">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Admin Access
-          </h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="text-3xl font-bold mb-2">Admin Access</h2>
+          <p className="text-neutral-content/40 mb-6">
             Only authorized administrators can access this area.
           </p>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-blue-800">
-              <strong>Note:</strong> Only the email address{" "}
-              <code className="bg-blue-100 px-1 rounded">
-                jlescarlan11@gmail.com
-              </code>{" "}
-              is authorized to access the admin panel.
-            </p>
-          </div>
         </div>
         <SignInButton
-          className="w-full btn btn-primary h-12 px-6 text-base font-medium"
+          className="w-full btn btn-primary font-medium"
           aria-label="Log in with Google"
         >
           Sign In with Google

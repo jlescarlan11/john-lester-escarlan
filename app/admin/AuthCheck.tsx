@@ -10,19 +10,19 @@ interface Session {
 }
 
 const AuthCheck = async ({ children }: { children: ReactNode }) => {
-  const session = await getServerSession(GET) as Session | null;
-  
+  const session = (await getServerSession(GET)) as Session | null;
+
   if (!session) {
-    redirect("/admin/signin");
+    redirect("/auth/signin");
     return null;
   }
 
   // Check if the user's email matches the allowed admin email
-  const allowedEmail = process.env.ADMIN_EMAIL || "jlescarlan11@gmail.com";
+  const allowedEmail = process.env.ADMIN_EMAIL!;
   const userEmail = session.user?.email;
-  
+
   if (!userEmail || userEmail.toLowerCase() !== allowedEmail.toLowerCase()) {
-    redirect("/admin/signin");
+    redirect("/auth/signin");
     return null;
   }
 

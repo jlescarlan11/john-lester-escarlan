@@ -1,23 +1,24 @@
 import Breadcrumbs from "../_components/Breadcrumbs";
 import Link from "next/link";
-import AuthCheck from "./AuthCheck";
 import SignOutButton from "../_components/SignOutButton";
 
 const AdminPage = () => {
   return (
-    <AuthCheck>
+    <>
       <Breadcrumbs />
       <div className="mb-6">
+        <h1 className="text-4xl font-bold">AdminPage</h1>
+      </div>
+      <div className="mb-4 flex space-x-4">
         <Link
           href="/admin/project"
-          className="inline-flex items-center px-4 py-2 bg-primary text-primary-content rounded-lg hover:bg-primary-focus transition-colors font-semibold text-sm"
+          className=" px-4 py-2 btn btn-primary font-semibold"
         >
           Manage Projects
         </Link>
+        <SignOutButton className="btn btn-primary" />
       </div>
-      <div>AdminPage</div>
-      <SignOutButton className="btn btn-ghost justify-start h-11 w-full text-base" />
-    </AuthCheck>
+    </>
   );
 };
 

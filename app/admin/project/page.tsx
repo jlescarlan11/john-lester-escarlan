@@ -122,25 +122,25 @@ const ProjectPageClient = () => {
   return (
     <div className="space-y-4">
       <Breadcrumbs />
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
-        <h1 className="text-2xl font-bold">Project Management</h1>
-        <div className="flex gap-2 w-full justify-between sm:w-auto">
-          <SearchInput
-            value={search}
-            onChange={setSearch}
-            placeholder="Search projects..."
-          />
-          <button
-            className="btn btn-primary"
-            onClick={openModal}
-            disabled={loading}
-          >
-            Add New Project
-          </button>
-        </div>
+      <div className="mb-6">
+        <h1 className="text-4xl font-bold">Project Management</h1>
       </div>
-      <div className="overflow-x-auto">
-        <table className="table">
+      <div className="flex gap-2 w-full justify-between sm:w-auto">
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          placeholder="Search projects..."
+        />
+        <button
+          className="btn btn-primary"
+          onClick={openModal}
+          disabled={loading}
+        >
+          Add New Project
+        </button>
+      </div>
+      <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+        <table className="table table-zebra">
           <thead>
             <tr>
               <th></th>

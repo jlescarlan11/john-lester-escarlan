@@ -28,27 +28,29 @@ This application includes admin access control that restricts access to only aut
 
 Create a `.env.local` file in the root directory with the following variables:
 
-```env
-# Google OAuth (required for authentication)
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-# Admin Access Control (optional - defaults to jlescarlan11@gmail.com)
-ADMIN_EMAIL=jlescarlan11@gmail.com
-NEXT_PUBLIC_ADMIN_EMAIL=jlescarlan11@gmail.com
-```
-
 ### How it works
 
 1. **Server-side protection**: The NextAuth configuration includes a `signIn` callback that checks if the user's email matches the `ADMIN_EMAIL` environment variable
-2. **Client-side protection**: The admin signin page checks authentication status and shows appropriate error messages
+2. **Client-side protection**: The auth signin page checks authentication status and shows appropriate error messages
 3. **Route protection**: The `AuthCheck` component verifies both authentication and email authorization on every admin page load
+4. **Layout protection**: All admin routes are protected by the admin layout
 
 ### Access Flow
 
 - **Unauthorized users**: Will see an error message and be redirected to sign out
 - **Authorized users**: Will be automatically redirected to the admin panel after successful authentication
-- **Default admin email**: `jlescarlan11@gmail.com` (can be changed via environment variables)
+
+### Route Structure
+
+- **Protected routes** (require authentication):
+
+  - `/admin` - Main admin dashboard
+  - `/admin/project` - Project management
+  - `/admin/project/*` - All project-related pages
+
+- **Public routes** (no authentication required):
+  - `/auth/signin` - Admin signin page
+  - `/` - Main portfolio page
 
 ## Learn More
 
