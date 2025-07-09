@@ -5,6 +5,7 @@ export const profileData = {
   avatar: ProfileAvatar,
   name: "John Lester Escarlan",
   role: "Software Developer",
+  location: "Cebu City",
 };
 
 export const socialLinks = [
@@ -17,4 +18,4 @@ export const socialLinks = [
     href: "https://www.linkedin.com/in/john-lester-escarlan/",
   },
   { icon: LuMail, href: "mailto:jlescarlan11@gmail.com" },
-]; 
+];

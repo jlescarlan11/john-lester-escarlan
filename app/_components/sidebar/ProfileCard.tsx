@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { LuDownload } from "react-icons/lu";
 import { profileData, socialLinks } from "../_data/profile";
 import Card from "../ui/Card";
 
@@ -24,8 +25,9 @@ const ProfileCard = () => {
         <div className="flex justify-center">
           <div className=" badge badge-primary">{profileData.role}</div>
         </div>
-        <div className="border-b border-base-content/20 w-full mt-4"></div>
-        <div className="flex justify-center space-x-4">
+
+        <div className=" border-b border-base-content/20 w-full mt-4"></div>
+        <div className="flex items-center justify-center space-x-4">
           {socialLinks.map((socialLink, index) => {
             const Icon = socialLink.icon;
             return (
@@ -34,10 +36,20 @@ const ProfileCard = () => {
                 href={socialLink.href}
                 className="flex items-center gap-2 "
               >
-                <Icon />
+                <Icon className="text-primary" />
               </Link>
             );
           })}
+          <div className="flex justify-center">
+            <a
+              href="/resume.pdf"
+              download
+              className="btn btn-link flex items-center gap-2"
+            >
+              <LuDownload />
+              Resume
+            </a>
+          </div>
         </div>
       </div>
     </Card>

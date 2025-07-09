@@ -7,18 +7,7 @@ import axios from "axios";
 import { useToast } from "../../_components/ToastContext";
 import Breadcrumbs from "../../_components/Breadcrumbs";
 import SearchInput from "../../_components/SearchInput";
-
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  technology: string[];
-  link: string;
-  isFeatured: boolean;
-  preview?: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
+import { fetchProjects, Project } from "../../_components/utils/fetchProjects";
 
 const ProjectPageClient = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -52,23 +41,15 @@ const ProjectPageClient = () => {
     setDeleteLoading(false);
   };
 
-  // Fetch projects
-  const fetchProjects = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get("/api/project");
-      const result = response.data;
-      if (result.success) {
-        setProjects(result.data);
-      } else {
-        showToast("error", "Failed to fetch projects");
-      }
-    } catch (err) {
-      console.log("fetchProjects error:", err);
-      showToast("error", "Failed to load projects");
-    } finally {
-      setLoading(false);
+  const fetchAndSetProjects = useCallback(async () => {
+    setLoading(true);
+    const result = await fetchProjects();
+    if (result.success) {
+      setProjects(result.data);
+    } else {
+      showToast("error", "Failed to fetch projects");
     }
+    setLoading(false);
   }, [showToast]);
 
   // Delete project
@@ -99,18 +80,18 @@ const ProjectPageClient = () => {
 
   // Handle project updates
   const handleProjectUpdated = () => {
-    fetchProjects();
+    fetchAndSetProjects();
     showToast("success", "Projects loaded successfully");
   };
 
   // Load projects on component mount
   useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
+    fetchAndSetProjects();
+  }, [fetchAndSetProjects]);
 
   // Refresh projects after adding new one
   const handleProjectAdded = () => {
-    fetchProjects();
+    fetchAndSetProjects();
     showToast("success", "Projects loaded successfully");
   };
 

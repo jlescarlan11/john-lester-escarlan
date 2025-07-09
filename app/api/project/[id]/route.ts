@@ -2,15 +2,25 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { prisma } from "@/prisma/client";
 import { z } from "zod";
+import { getCache, setCache, clearProjectCache } from "../../_cache";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 const projectUpdateSchema = z.object({
-  title: z.string().min(1, "Title is required").max(55, "Title must be 55 characters or less"),
-  description: z.string().min(1, "Description is required").max(255, "Description must be 255 characters or less"),
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(55, "Title must be 55 characters or less"),
+  description: z
+    .string()
+    .min(1, "Description is required")
+    .max(255, "Description must be 255 characters or less"),
   link: z.string().min(1, "Link is required").url("Please enter a valid URL"),
-  technologies: z.string().min(1, "Technologies are required").max(200, "Technologies list is too long"),
+  technologies: z
+    .string()
+    .min(1, "Technologies are required")
+    .max(200, "Technologies list is too long"),
   isFeatured: z.boolean().default(false),
 });
 
@@ -33,7 +43,10 @@ export async function PUT(request: NextRequest) {
     const url = request.url;
     const id = getProjectIdFromUrl(url);
     if (!id) {
-      return NextResponse.json({ success: false, error: "Project ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Project ID is required" },
+        { status: 400 }
+      );
     }
     const formData = await request.formData();
     const title = formData.get("title") as string;
@@ -52,11 +65,14 @@ export async function PUT(request: NextRequest) {
       isFeatured,
     });
     if (!validationResult.success) {
-      return NextResponse.json({
-        error: "Validation failed",
-        details: validationResult.error.errors,
-        message: "Please check the form fields and try again"
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: "Validation failed",
+          details: validationResult.error.errors,
+          message: "Please check the form fields and try again",
+        },
+        { status: 400 }
+      );
     }
 
     // Check if project exists
@@ -70,37 +86,79 @@ export async function PUT(request: NextRequest) {
     // Upload new image if provided
     if (preview && preview.size > 0) {
       if (!supabase) {
-        return NextResponse.json({ error: "File upload service not configured" }, { status: 500 });
+        return NextResponse.json(
+          { error: "File upload service not configured" },
+          { status: 500 }
+        );
+      }
+      // Delete old image if it exists
+      if (imageUrl) {
+        try {
+          // Extract filename from the URL
+          const urlParts = imageUrl.split("/");
+          const bucketIndex = urlParts.findIndex(
+            (part) => part === "project-preview"
+          );
+          const oldFileName =
+            bucketIndex !== -1
+              ? urlParts.slice(bucketIndex + 1).join("/")
+              : urlParts[urlParts.length - 1];
+          if (oldFileName) {
+            const { error: deleteError } = await supabase.storage
+              .from("project-preview")
+              .remove([oldFileName]);
+            if (deleteError) {
+              console.error("Failed to delete old image from storage:", deleteError);
+            }
+          }
+        } catch (storageError) {
+          console.error("Error deleting old image from storage:", storageError);
+        }
       }
       // Validate file type
       const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
       if (!allowedTypes.includes(preview.type)) {
-        return NextResponse.json({ error: "Invalid file type. Only JPEG, PNG, and WebP are allowed" }, { status: 400 });
+        return NextResponse.json(
+          { error: "Invalid file type. Only JPEG, PNG, and WebP are allowed" },
+          { status: 400 }
+        );
       }
       // Validate file size (max 5MB)
       const maxSize = 5 * 1024 * 1024;
       if (preview.size > maxSize) {
-        return NextResponse.json({ error: "File too large. Maximum size is 5MB" }, { status: 400 });
+        return NextResponse.json(
+          { error: "File too large. Maximum size is 5MB" },
+          { status: 400 }
+        );
       }
       try {
         const fileExt = preview.name.split(".").pop();
         const fileName = `${Date.now()}.${fileExt}`;
         const { /* data, */ error: uploadError } = await supabase.storage
-          .from("project-previews")
+          .from("project-preview")
           .upload(fileName, preview);
         if (uploadError) {
           console.error("Supabase upload error:", uploadError);
-          return NextResponse.json({ error: "Failed to upload image", details: uploadError.message }, { status: 500 });
+          return NextResponse.json(
+            { error: "Failed to upload image", details: uploadError.message },
+            { status: 500 }
+          );
         }
-        imageUrl = `${supabaseUrl}/storage/v1/object/public/project-previews/${fileName}`;
+        imageUrl = `${supabaseUrl}/storage/v1/object/public/project-preview/${fileName}`;
       } catch (uploadException) {
         console.error("Exception during upload:", uploadException);
-        return NextResponse.json({ error: "Failed to upload image" }, { status: 500 });
+        return NextResponse.json(
+          { error: "Failed to upload image" },
+          { status: 500 }
+        );
       }
     }
 
     // Parse technologies
-    const technologyArray = technologies.split(",").map((t) => t.trim()).filter(Boolean);
+    const technologyArray = technologies
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
 
     // Update project
     const updatedProject = await prisma.project.update({
@@ -115,17 +173,23 @@ export async function PUT(request: NextRequest) {
       },
     });
 
+    // Invalidate project cache
+    clearProjectCache();
+
     return NextResponse.json({
       success: true,
       data: updatedProject,
-      message: "Project updated successfully"
+      message: "Project updated successfully",
     });
   } catch (error) {
     console.error("Project update error:", error);
-    return NextResponse.json({
-      error: "Failed to update project",
-      details: error instanceof Error ? error.message : String(error),
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Failed to update project",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -134,7 +198,10 @@ export async function DELETE(request: NextRequest) {
     const url = request.url;
     const id = getProjectIdFromUrl(url);
     if (!id) {
-      return NextResponse.json({ success: false, error: "Project ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Project ID is required" },
+        { status: 400 }
+      );
     }
     // Check if project exists
     const existingProject = await prisma.project.findUnique({ where: { id } });
@@ -145,11 +212,16 @@ export async function DELETE(request: NextRequest) {
     if (existingProject.preview && supabase) {
       try {
         // Extract filename from the URL
-        const urlParts = existingProject.preview.split('/');
+        const urlParts = existingProject.preview.split("/");
         // Find the index of 'project-previews' in the URL
-        const bucketIndex = urlParts.findIndex(part => part === 'project-previews');
+        const bucketIndex = urlParts.findIndex(
+          (part) => part === "project-previews"
+        );
         // The filename is everything after the bucket name
-        const fileName = bucketIndex !== -1 ? urlParts.slice(bucketIndex + 1).join('/') : urlParts[urlParts.length - 1];
+        const fileName =
+          bucketIndex !== -1
+            ? urlParts.slice(bucketIndex + 1).join("/")
+            : urlParts[urlParts.length - 1];
         if (fileName) {
           console.log("Attempting to delete from Supabase:", fileName);
           const { error: deleteError } = await supabase.storage
@@ -167,16 +239,49 @@ export async function DELETE(request: NextRequest) {
     }
     // Delete project
     const deletedProject = await prisma.project.delete({ where: { id } });
+
+    // Invalidate project cache
+    clearProjectCache();
+
     return NextResponse.json({
       success: true,
       data: deletedProject,
-      message: "Project deleted successfully"
+      message: "Project deleted successfully",
     });
   } catch (error) {
     console.error("Project deletion error:", error);
-    return NextResponse.json({
-      error: "Failed to delete project",
-      details: error instanceof Error ? error.message : String(error),
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Failed to delete project",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 }
+    );
   }
-} 
+}
+
+// If there is a GET handler for a single project, add cache logic
+export async function GET(request: NextRequest) {
+  const url = request.url;
+  const id = getProjectIdFromUrl(url);
+  if (!id) {
+    return NextResponse.json({ error: "Project ID is required" }, { status: 400 });
+  }
+  const cacheKey = `/api/project/${id}`;
+  const cached = getCache(cacheKey);
+  if (cached) {
+    return NextResponse.json(cached);
+  }
+  try {
+    const project = await prisma.project.findUnique({ where: { id } });
+    if (!project) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    }
+    const response = { success: true, data: project };
+    setCache(cacheKey, response);
+    return NextResponse.json(response);
+  } catch (error) {
+    console.error("Failed to fetch project:", error);
+    return NextResponse.json({ success: false, error: "Failed to fetch project" }, { status: 500 });
+  }
+}

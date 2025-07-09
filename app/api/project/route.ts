@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { prisma } from "@/prisma/client";
 import { z } from "zod";
+import { getCache, setCache, clearProjectCache } from "../_cache";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -85,6 +86,9 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Invalidate project cache
+    clearProjectCache();
+
     return NextResponse.json({
       success: true,
       data: newProject,
@@ -100,11 +104,19 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
+  // Use the request URL as cache key (no params here, so static)
+  const cacheKey = "/api/project";
+  const cached = getCache(cacheKey);
+  if (cached) {
+    return NextResponse.json(cached);
+  }
   try {
     const projects = await prisma.project.findMany({
       orderBy: { createdAt: "desc" },
     });
-    return NextResponse.json({ success: true, data: projects });
+    const response = { success: true, data: projects };
+    setCache(cacheKey, response);
+    return NextResponse.json(response);
   } catch (error) {
     console.error("Failed to fetch projects:", error);
     return NextResponse.json({ success: false, error: "Failed to fetch projects" }, { status: 500 });

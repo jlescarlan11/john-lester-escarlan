@@ -5,19 +5,21 @@ import TechIcons from "../common/TechIcons";
 
 const AboutSection = () => {
   return (
-    <section className="">
+    <section id="about" className="">
       <SectionHeader>About</SectionHeader>
       <div className="space-y-2">
         <p>
-          A mathematics student and software developer specializing in
-          full-stack web applications using React, Node.js, and database
-          technologies. Currently expanding into Java, PHP, Laravel, and Spring
-          Boot to build scalable applications.
+          A full-stack developer from Cebu City with hands-on experience
+          building web applications that people actually use. I work with React
+          and Node.js to create fast, reliable websites and handle everything
+          from user interfaces to databases.
         </p>
         <p>
-          These are some tools I use to build reliable, user-friendly apps and
-          solve business problems:
+          I&apos;m also studying mathematics, which helps me approach coding
+          problems with logical thinking and attention to detail. Currently
+          learning Java and PHP to expand what I can build for clients.
         </p>
+        <p>Here are the tools I use to build things that work:</p>
         <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
           {techs.map((tech) => (
             <div

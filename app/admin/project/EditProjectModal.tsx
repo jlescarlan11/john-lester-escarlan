@@ -23,11 +23,16 @@ type EditProjectModalProps = {
   onProjectUpdated: () => void;
 };
 
-const EditProjectModal: React.FC<EditProjectModalProps> = ({ 
-  open, 
-  onClose, 
-  project, 
-  onProjectUpdated 
+// Validation constants
+const MAX_TITLE_LENGTH = 55;
+const MAX_DESCRIPTION_LENGTH = 255;
+const MAX_TECHNOLOGIES_LENGTH = 200;
+
+const EditProjectModal: React.FC<EditProjectModalProps> = ({
+  open,
+  onClose,
+  project,
+  onProjectUpdated,
 }) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const { showToast } = useToast();
@@ -42,11 +47,6 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
   const [isFeatured, setIsFeatured] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Validation constants
-  const MAX_TITLE_LENGTH = 55;
-  const MAX_DESCRIPTION_LENGTH = 255;
-  const MAX_TECHNOLOGIES_LENGTH = 200;
 
   useEffect(() => {
     if (open && dialogRef.current) {
@@ -112,14 +112,23 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
       return false;
     }
     if (description.length > MAX_DESCRIPTION_LENGTH) {
-      setError(`Description must be ${MAX_DESCRIPTION_LENGTH} characters or less`);
+      setError(
+        `Description must be ${MAX_DESCRIPTION_LENGTH} characters or less`
+      );
       return false;
     }
     if (technologies.length > MAX_TECHNOLOGIES_LENGTH) {
-      setError(`Technologies must be ${MAX_TECHNOLOGIES_LENGTH} characters or less`);
+      setError(
+        `Technologies must be ${MAX_TECHNOLOGIES_LENGTH} characters or less`
+      );
       return false;
     }
-    if (!title.trim() || !description.trim() || !link.trim() || !technologies.trim()) {
+    if (
+      !title.trim() ||
+      !description.trim() ||
+      !link.trim() ||
+      !technologies.trim()
+    ) {
       setError("All fields are required");
       return false;
     }
@@ -151,7 +160,9 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
       const result = response.data;
       if (!response.status || !result.success) {
         if (result.details && Array.isArray(result.details)) {
-          const errorMessages = result.details.map((detail: { message: string }) => detail.message).join(", ");
+          const errorMessages = result.details
+            .map((detail: { message: string }) => detail.message)
+            .join(", ");
           throw new Error(errorMessages);
         }
         throw new Error(result.error || `HTTP ${response.status}`);
@@ -246,7 +257,7 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
               type="text"
               className="input input-bordered w-full"
               value={title}
-              onChange={e => setTitle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value)}
               maxLength={MAX_TITLE_LENGTH}
               required
             />
@@ -256,7 +267,7 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
             <textarea
               className="textarea textarea-bordered w-full min-h-[100px]"
               value={description}
-              onChange={e => setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
               maxLength={MAX_DESCRIPTION_LENGTH}
               required
             />
@@ -267,7 +278,7 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
               type="url"
               className="input input-bordered w-full"
               value={link}
-              onChange={e => setLink(e.target.value)}
+              onChange={(e) => setLink(e.target.value)}
               placeholder="https://example.com"
               required
             />
@@ -278,7 +289,7 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
               type="text"
               className="input input-bordered w-full"
               value={technologies}
-              onChange={e => setTechnologies(e.target.value)}
+              onChange={(e) => setTechnologies(e.target.value)}
               placeholder="React, TypeScript, Node.js"
               maxLength={MAX_TECHNOLOGIES_LENGTH}
               required
@@ -290,7 +301,7 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
                 type="checkbox"
                 className="checkbox checkbox-primary"
                 checked={isFeatured}
-                onChange={e => setIsFeatured(e.target.checked)}
+                onChange={(e) => setIsFeatured(e.target.checked)}
               />
               <span className="font-medium">Featured Project</span>
             </label>
@@ -314,7 +325,11 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
               className="btn flex-1 btn-primary"
               disabled={loading}
             >
-              {loading ? <span className="loading loading-dots loading-xs"></span> : "Update Project"}
+              {loading ? (
+                <span className="loading loading-dots loading-xs"></span>
+              ) : (
+                "Update Project"
+              )}
             </button>
           </div>
         </form>
@@ -323,4 +338,4 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
   );
 };
 
-export default EditProjectModal; 
+export default EditProjectModal;
