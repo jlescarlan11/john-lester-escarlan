@@ -10,6 +10,7 @@ import {
   FaPhp,
   FaReact,
   FaAws,
+  FaSlack,
 } from "react-icons/fa";
 import {
   SiExpress,
@@ -33,6 +34,9 @@ import {
   SiAstro,
   SiGraphql,
   SiDotnet,
+  SiSharp,
+  SiBootstrap,
+  SiSupabase,
 } from "react-icons/si";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -67,6 +71,10 @@ const iconMap: Record<string, React.ReactNode> = {
   SiGraphql: <SiGraphql />,
   FaAws: <FaAws />,
   SiDotnet: <SiDotnet />,
+  FaSlack: <FaSlack />,
+  SiSharp: <SiSharp />,
+  SiBootstrap: <SiBootstrap />,
+  SiSupabase: <SiSupabase />,
 };
 
 interface TechIconsProps {

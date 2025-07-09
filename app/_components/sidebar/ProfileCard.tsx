@@ -8,26 +8,28 @@ const ProfileCard = () => {
   return (
     <Card>
       <div className="space-y-2">
-        <div className="flex justify-center">
-          <Image
-            src={profileData.avatar}
-            className="rounded-lg"
-            alt="Profile"
-            width={100}
-            height={100}
-          />
-        </div>
-        <div>
-          <p className="text-center text-xl font-semibold">
-            {profileData.name}
-          </p>
-        </div>
-        <div className="flex justify-center">
-          <div className=" badge badge-primary">{profileData.role}</div>
+        <div className="gap-y-2 flex items-center lg:block gap-x-4">
+          <div className="flex justify-center">
+            <Image
+              src={profileData.avatar}
+              className="rounded-lg size-20 lg:size-32"
+              alt="Profile"
+            />
+          </div>
+          <div className="space-y-2">
+            <div>
+              <p className="text-center text-xl font-semibold">
+                {profileData.name}
+              </p>
+            </div>
+            <div className="flex lg:justify-center">
+              <div className=" badge badge-primary">{profileData.role}</div>
+            </div>
+          </div>
         </div>
 
         <div className=" border-b border-base-content/20 w-full mt-4"></div>
-        <div className="flex items-center justify-center space-x-4">
+        <div className="flex items-center justify-center flex-wrap gap-x-4">
           {socialLinks.map((socialLink, index) => {
             const Icon = socialLink.icon;
             return (

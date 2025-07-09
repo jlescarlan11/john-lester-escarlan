@@ -10,6 +10,7 @@ const experienceTimeline: TimelineItem[] = experienceLists.map((item) => ({
   name: item.company,
   title: item.position,
   description: item.description,
+  technologies: item.technologies, // pass technologies
 }));
 
 const ExperienceSection = () => (

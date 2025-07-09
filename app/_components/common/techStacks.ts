@@ -161,6 +161,26 @@ export const techStacks: Record<string, TechItem> = {
     icon: "SiDotnet",
     description: "Razor and MVC development",
   },
+  slack: {
+    name: "Slack",
+    icon: "FaSlack",
+    description: "Razor and MVC development",
+  },
+  csharp: {
+    name: "C#",
+    icon: "SiSharp",
+    description: "Razor and MVC development",
+  },
+  bootstrap: {
+    name: "Bootstrap",
+    icon: "SiBootstrap",
+    description: "Razor and MVC development",
+  },
+  supabase: {
+    name: "Supabase",
+    icon: "SiSupabase",
+    description: "Razor and MVC development",
+  },
 };
 
 export default techStacks;
