@@ -1,16 +1,17 @@
-import React from "react";
-import Card from "../ui/Card";
 import AboutSection from "../section/About";
-import TechStackSection from "../section/TechStack";
+import EducationSection from "../section/Education";
+import ExperienceSection from "../section/Experience";
+import PortfolioSection from "../section/Portfolio";
 
 const MainContent = () => {
   return (
-    <Card>
-      <div className="space-y-8">
-        <AboutSection />
-        <TechStackSection />
-      </div>
-    </Card>
+    <div className="space-y-16 ">
+      <AboutSection />
+
+      <EducationSection />
+      <ExperienceSection />
+      <PortfolioSection />
+    </div>
   );
 };
 
