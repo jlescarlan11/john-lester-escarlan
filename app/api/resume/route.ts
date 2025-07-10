@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { generateLatex } from "./latexTemplate";
-import { getResumeData } from "@/app/_components/_data/resumeData";
+import { getResumeData, ResumeData } from "@/app/_components/_data/resumeData";
 import { spawn } from "child_process";
 import fs from "fs/promises";
 import path from "path";
@@ -11,12 +11,12 @@ export async function GET() {
   try {
     const CACHE_KEY = "/api/resume";
     const ONE_MONTH_MS = 30 * 24 * 60 * 60 * 1000;
-    let resumeData = getCache(CACHE_KEY);
+    let resumeData = getCache(CACHE_KEY) as ResumeData | null;
     if (!resumeData) {
       resumeData = await getResumeData();
       setCache(CACHE_KEY, resumeData, ONE_MONTH_MS);
     }
-    const latex = generateLatex(resumeData as any);
+    const latex = generateLatex(resumeData);
 
     // Write LaTeX to temp file
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "resume-"));
