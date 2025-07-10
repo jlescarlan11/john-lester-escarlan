@@ -29,4 +29,14 @@ export async function fetchProjects(): Promise<FetchProjectsResult> {
       error: (error as Error).message || "Unknown error",
     };
   }
+}
+
+// Shared function to get top 3 featured projects, sorted by createdAt desc
+export async function fetchFeaturedProjects(): Promise<Project[]> {
+  const result = await fetchProjects();
+  if (!result.success) return [];
+  return result.data
+    .filter((project) => project.isFeatured)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 3);
 } 

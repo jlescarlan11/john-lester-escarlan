@@ -36,7 +36,7 @@ const SectionNav = () => {
   };
 
   return (
-    <Card className="p-4! bg-base-100! rounded-t-none drop-shadow-sm!">
+    <Card className="p-4! bg-base-100! lg:bg-base-200! rounded-t-none lg:rounded-2xl! lg:p-8! drop-shadow-sm!">
       <div className="space-y-4 ">
         <ul className="flex justify-center lg:justify-start flex-row lg:flex-col gap-2 lg:gap-1">
           {navigationItems.map((item) => (

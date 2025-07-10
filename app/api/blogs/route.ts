@@ -20,8 +20,7 @@ export async function GET() {
     // Set cache for 1 DAY
     setCache(CACHE_KEY, blogs, ONE_DAY_MS);
     return NextResponse.json({ success: true, data: blogs });
-  } catch (error) {
-    console.error("Failed to fetch blogs:", error);
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to fetch blogs" },
       { status: 500 }

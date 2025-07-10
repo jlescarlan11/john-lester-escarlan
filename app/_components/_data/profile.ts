@@ -19,3 +19,12 @@ export const socialLinks = [
   },
   { icon: LuMail, href: "mailto:jlescarlan11@gmail.com" },
 ];
+
+export const contactInfo = {
+  location: "Cebu City",
+  email: "jnescarlan@up.edu.ph",
+  phone: "995 7128 195",
+  website: "https://john-lester-escarlan-portfolio.vercel.app/",
+  linkedin: "https://www.linkedin.com/in/john-lester-escarlan/",
+  github: "https://github.com/jlescarlan11"
+};

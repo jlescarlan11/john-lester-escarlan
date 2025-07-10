@@ -28,8 +28,8 @@ let supabase: SupabaseClient | null = null;
 if (supabaseKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseKey);
-  } catch (error) {
-    console.error("Failed to initialize Supabase client:", error);
+  } catch {
+    // console.error("Failed to initialize Supabase client");
   }
 }
 
@@ -104,18 +104,12 @@ export async function PUT(request: NextRequest) {
               ? urlParts.slice(bucketIndex + 1).join("/")
               : urlParts[urlParts.length - 1];
           if (oldFileName) {
-            const { error: deleteError } = await supabase.storage
+            await supabase.storage
               .from("project-preview")
               .remove([oldFileName]);
-            if (deleteError) {
-              console.error(
-                "Failed to delete old image from storage:",
-                deleteError
-              );
-            }
           }
-        } catch (storageError) {
-          console.error("Error deleting old image from storage:", storageError);
+        } catch {
+          // console.error("Error deleting old image from storage:", storageError);
         }
       }
       // Validate file type
@@ -137,19 +131,12 @@ export async function PUT(request: NextRequest) {
       try {
         const fileExt = preview.name.split(".").pop();
         const fileName = `${Date.now()}.${fileExt}`;
-        const { /* data, */ error: uploadError } = await supabase.storage
+        await supabase.storage
           .from("project-preview")
           .upload(fileName, preview);
-        if (uploadError) {
-          console.error("Supabase upload error:", uploadError);
-          return NextResponse.json(
-            { error: "Failed to upload image", details: uploadError.message },
-            { status: 500 }
-          );
-        }
         imageUrl = `${supabaseUrl}/storage/v1/object/public/project-preview/${fileName}`;
-      } catch (uploadException) {
-        console.error("Exception during upload:", uploadException);
+      } catch {
+        // console.error("Exception during upload:", uploadException);
         return NextResponse.json(
           { error: "Failed to upload image" },
           { status: 500 }
@@ -184,12 +171,12 @@ export async function PUT(request: NextRequest) {
       data: updatedProject,
       message: "Project updated successfully",
     });
-  } catch (error) {
-    console.error("Project update error:", error);
+  } catch {
+    // console.error("Project update error:", error);
     return NextResponse.json(
       {
         error: "Failed to update project",
-        details: error instanceof Error ? error.message : String(error),
+        details: "",
       },
       { status: 500 }
     );
@@ -230,13 +217,13 @@ export async function DELETE(request: NextRequest) {
             .from("project-preview")
             .remove([fileName]);
           if (deleteError) {
-            console.error("Failed to delete image from storage:", deleteError);
+            // console.error("Failed to delete image from storage:", deleteError);
           } else {
-            console.error("Image deleted from storage:", fileName);
+            // console.error("Image deleted from storage:", fileName);
           }
         }
-      } catch (storageError) {
-        console.error("Error deleting image from storage:", storageError);
+      } catch {
+        // console.error("Error deleting image from storage:", storageError);
       }
     }
     // Delete project
@@ -250,12 +237,11 @@ export async function DELETE(request: NextRequest) {
       data: deletedProject,
       message: "Project deleted successfully",
     });
-  } catch (error) {
-    console.error("Project deletion error:", error);
+  } catch {
     return NextResponse.json(
       {
         error: "Failed to delete project",
-        details: error instanceof Error ? error.message : String(error),
+        details: "",
       },
       { status: 500 }
     );
@@ -285,8 +271,7 @@ export async function GET(request: NextRequest) {
     const response = { success: true, data: project };
     setCache(cacheKey, response);
     return NextResponse.json(response);
-  } catch (error) {
-    console.error("Failed to fetch project:", error);
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to fetch project" },
       { status: 500 }

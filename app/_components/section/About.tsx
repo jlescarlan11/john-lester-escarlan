@@ -1,6 +1,6 @@
 import React from "react";
 import SectionHeader from "../common/SectionHeader";
-import techs from "../_data/about";
+import techs, { aboutDescription } from "../_data/about";
 import TechIcons from "../common/TechIcons";
 
 const AboutSection = () => {
@@ -8,17 +8,9 @@ const AboutSection = () => {
     <section id="about" className="">
       <SectionHeader>About</SectionHeader>
       <div className="space-y-2">
-        <p>
-          A full-stack developer from Cebu City with hands-on experience
-          building web applications that people actually use. I work with React
-          and Node.js to create fast, reliable websites and handle everything
-          from user interfaces to databases.
-        </p>
-        <p>
-          I&apos;m also studying mathematics, which helps me approach coding
-          problems with logical thinking and attention to detail. Currently
-          learning Java and PHP to expand what I can build for clients.
-        </p>
+        {aboutDescription.map((desc, i) => (
+          <p key={i}>{desc}</p>
+        ))}
         <p>Here are the tools I use to build things that work:</p>
         <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
           {techs.map((tech) => (

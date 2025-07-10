@@ -68,7 +68,6 @@ export async function POST(request: NextRequest) {
         .from("project-preview")
         .upload(fileName, preview);
       if (uploadError) {
-        console.error("Supabase upload error:", uploadError);
         return NextResponse.json({ error: "Failed to upload image", details: uploadError.message }, { status: 500 });
       }
       imageUrl = `${supabaseUrl}/storage/v1/object/public/project-preview/${fileName}`;
@@ -95,7 +94,6 @@ export async function POST(request: NextRequest) {
       message: "Project created successfully",
     });
   } catch (error) {
-    console.error("Project creation error:", error);
     return NextResponse.json({
       error: "Failed to create project",
       details: error instanceof Error ? error.message : String(error),

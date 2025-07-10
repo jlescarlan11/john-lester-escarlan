@@ -92,8 +92,7 @@ const ProfileCard = () => {
                   );
                 })}
                 <a
-                  href="/resume.pdf"
-                  download
+                  href="/api/resume"
                   className="btn btn-link flex items-center gap-2 p-0 min-h-0 h-auto"
                 >
                   <LuDownload className="text-primary" />
@@ -121,8 +120,7 @@ const ProfileCard = () => {
               })}
               <div className="flex justify-center">
                 <a
-                  href="/resume.pdf"
-                  download
+                  href="/api/resume"
                   className="btn btn-link flex items-center gap-2"
                 >
                   <LuDownload />
