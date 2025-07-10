@@ -87,15 +87,15 @@ const PortfolioSection = () => {
           {featuredProjects.map((project, index) => (
             <div
               key={project.id}
-              className={`grid grid-cols-5 justify-center items-center gap-4 md:gap-8 ${
-                index % 2 !== 0 ? "flex-row-reverse" : ""
+              className={`relative md:grid md:grid-cols-5 justify-center items-center gap-4 md:gap-8 ${
+                index % 2 !== 0 ? "md:flex-row-reverse" : ""
               }`}
             >
               {/* Image - order changes based on index */}
               <div
                 className={`col-span-3 ${
-                  index % 2 !== 0 ? "order-2" : ""
-                } relative`}
+                  index % 2 !== 0 ? "md:order-2" : ""
+                } relative h-[225px]`}
               >
                 <div className="absolute inset-0 bg-neutral/40 hover:opacity-0 transition-opacity duration-300 rounded-lg z-10"></div>
                 <Image
@@ -106,14 +106,68 @@ const PortfolioSection = () => {
                     "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500'%3E%3Crect width='500' height='500' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%236b7280' font-family='system-ui' font-size='16'%3ENo Preview%3C/text%3E%3C/svg%3E"
                   }
                   alt={`Preview image of ${project.title}`}
-                  className="rounded-lg object-cover w-full h-[225px]"
+                  className="rounded-lg object-cover w-full h-full"
+                  style={{ height: "225px" }}
                 />
+                {/* Overlay content for small screens - fully contained in image */}
+                <div
+                  className="md:hidden absolute inset-0 flex flex-col justify-center items-start bg-base-200/90 p-4 rounded-lg z-20 overflow-auto"
+                  style={{ maxHeight: "225px" }}
+                >
+                  <span className="text-xs text-primary mb-2">
+                    Featured Project
+                  </span>
+                  <h3 className="text-base sm:text-2xl font-bold mb-3 text-left">
+                    {project.title}
+                  </h3>
+                  <div className=" text-xs sm:text-base mb-4 text-left opacity-90">
+                    {project.description}
+                  </div>
+                  <ul className="flex gap-2 text-xs flex-wrap opacity-80 rounded sm:py-1 mb-4 justify-start">
+                    {project.technology.map((tech, techIndex) => {
+                      const techData = techStacks[tech];
+                      if (!techData) return null;
+                      return (
+                        <div
+                          key={techIndex}
+                          className="badge badge-xs sm:badge-md badge-neutral cursor-pointer relative group transition-all duration-200 col-span-1"
+                          tabIndex={0}
+                        >
+                          <span className="flex gap-1 items-center font-medium text-center">
+                            <span>
+                              <TechIcons icon={techData.icon} />
+                            </span>
+                            {techData.name}
+                          </span>
+                          {/* Tooltip */}
+                          <div className="absolute z-10 left-1/2 -translate-x-1/2 top-full mt-2 w-56 p-2 rounded shadow-lg bg-base-200 text-xs text-left opacity-0 group-hover:opacity-100 group-focus:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus:pointer-events-auto transition-all duration-200 border border-base-300">
+                            {techData.description}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </ul>
+                  <div className="flex gap-4 sm:mt-2">
+                    {project.link && (
+                      <Link
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-link p-0 min-h-0 h-auto"
+                        aria-label="External Link"
+                      >
+                        <LuExternalLink size={16} />
+                      </Link>
+                    )}
+                    {/* Add more icons/links here if needed */}
+                  </div>
+                </div>
               </div>
 
-              {/* Content - order changes based on index */}
+              {/* Content - order changes based on index, only visible on md+ */}
               <div
-                className={`flex flex-col space-y-2 col-span-2 ${
-                  index % 2 !== 0 ? "order-1 items-start" : "items-end"
+                className={`hidden md:flex flex-col space-y-2 col-span-2 ${
+                  index % 2 !== 0 ? "md:order-1 items-start" : "items-end"
                 }`}
               >
                 <div

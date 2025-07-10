@@ -1,17 +1,16 @@
-import React from "react";
 import MainContent from "./MainContent";
 import Sidebar from "./Sidebar";
 
 const Layout = () => {
   return (
-    <div className="container max-w-7xl mx-auto py-4 lg:py-8 px-4">
-      <div className="grid grid-cols-1 lg:grid-cols-7 lg:gap-16">
-        <aside className="col-span-2 relative">
-          <div className="sticky top-16">
+    <div className="container max-w-7xl mx-auto py-4 lg:py-8 px-4 relative">
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-2 lg:gap-16">
+        <aside className="lg:col-span-2 sticky top-4 z-50">
+          <div className=" lg:block lg:sticky  lg:top-16">
             <Sidebar />
           </div>
         </aside>
-        <main className="col-span-5">
+        <main className="lg:col-span-5 z-10">
           <MainContent />
         </main>
       </div>

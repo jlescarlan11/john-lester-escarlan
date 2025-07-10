@@ -108,7 +108,10 @@ export async function PUT(request: NextRequest) {
               .from("project-preview")
               .remove([oldFileName]);
             if (deleteError) {
-              console.error("Failed to delete old image from storage:", deleteError);
+              console.error(
+                "Failed to delete old image from storage:",
+                deleteError
+              );
             }
           }
         } catch (storageError) {
@@ -223,14 +226,13 @@ export async function DELETE(request: NextRequest) {
             ? urlParts.slice(bucketIndex + 1).join("/")
             : urlParts[urlParts.length - 1];
         if (fileName) {
-          console.log("Attempting to delete from Supabase:", fileName);
           const { error: deleteError } = await supabase.storage
             .from("project-preview")
             .remove([fileName]);
           if (deleteError) {
             console.error("Failed to delete image from storage:", deleteError);
           } else {
-            console.log("Image deleted from storage:", fileName);
+            console.error("Image deleted from storage:", fileName);
           }
         }
       } catch (storageError) {
@@ -265,7 +267,10 @@ export async function GET(request: NextRequest) {
   const url = request.url;
   const id = getProjectIdFromUrl(url);
   if (!id) {
-    return NextResponse.json({ error: "Project ID is required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Project ID is required" },
+      { status: 400 }
+    );
   }
   const cacheKey = `/api/project/${id}`;
   const cached = getCache(cacheKey);
@@ -282,6 +287,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response);
   } catch (error) {
     console.error("Failed to fetch project:", error);
-    return NextResponse.json({ success: false, error: "Failed to fetch project" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch project" },
+      { status: 500 }
+    );
   }
 }

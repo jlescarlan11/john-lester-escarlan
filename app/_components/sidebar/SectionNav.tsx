@@ -36,13 +36,13 @@ const SectionNav = () => {
   };
 
   return (
-    <Card>
-      <div className="space-y-4">
-        <ul className="flex flex-col space-y-1">
+    <Card className="p-4! bg-base-100! rounded-t-none drop-shadow-sm!">
+      <div className="space-y-4 ">
+        <ul className="flex justify-center lg:justify-start flex-row lg:flex-col gap-2 lg:gap-1">
           {navigationItems.map((item) => (
             <li key={item.id}>
               <button
-                className={`text-left w-full transition-colors duration-300
+                className={`text-left flex gap-2 w-full transition-colors duration-300
                   ${activeSection === item.id ? "text-primary font-bold" : ""}
                   hover:text-secondary
                 `}
@@ -50,7 +50,10 @@ const SectionNav = () => {
                 onClick={() => handleNavClick(item.id)}
                 aria-current={activeSection === item.id ? "true" : undefined}
               >
-                {activeSection === item.id ? "━━" : "━"} {item.label}
+                <span className="hidden lg:block">
+                  {activeSection === item.id ? "━━ " : "━ "}
+                </span>
+                {item.label}
               </button>
             </li>
           ))}

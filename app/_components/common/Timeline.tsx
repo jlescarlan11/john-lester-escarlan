@@ -42,7 +42,7 @@ const Timeline: React.FC<TimelineProps> = ({ items }) => (
             <ul className="flex gap-2 text-xs flex-wrap opacity-60 rounded py-1 mt-2">
               {item.technologies.map((tech, techIndex) => {
                 const techData = techStacks[tech];
-                console.log(techData);
+
                 if (!techData) return null;
                 return (
                   <div
