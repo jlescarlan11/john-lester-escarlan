@@ -92,7 +92,7 @@ const ProfileCard = () => {
                   );
                 })}
                 <a
-                  href="/api/resume"
+                  href="/Resume_Escarlan_John_Lester.pdf"
                   className="btn btn-link flex items-center gap-2 p-0 min-h-0 h-auto"
                 >
                   <LuDownload className="text-primary" />
@@ -119,13 +119,15 @@ const ProfileCard = () => {
                 );
               })}
               <div className="flex justify-center">
-                <a
-                  href="/api/resume"
+                <Link
+                  href="/Resume_Escarlan_John_Lester.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="btn btn-link flex items-center gap-2"
                 >
                   <LuDownload />
                   Resume
-                </a>
+                </Link>
               </div>
             </div>
           </div>

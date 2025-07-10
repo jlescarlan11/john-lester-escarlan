@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build && npm run dev:resume",
+    "build:resume": "pdflatex -output-directory public resume.tex",
+    "dev:resume": "concurrently \"npm:start\" \"npx tsx scripts/generate-resume.ts\"",
+    "npm:start": "npm start",
     "start": "next start",
     "lint": "next lint"
   },
@@ -34,6 +37,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.2.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.5",
     "prisma": "^6.11.1",
