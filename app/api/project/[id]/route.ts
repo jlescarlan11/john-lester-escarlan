@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { prisma } from "@/prisma/client";
 import { z } from "zod";
-import { getCache, setCache, clearProjectCache } from "../../_cache";
+import { getCache, setCache, clearProjectCache, clearResumeCache } from "../../_cache";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -163,8 +163,9 @@ export async function PUT(request: NextRequest) {
       },
     });
 
-    // Invalidate project cache
+    // Invalidate project and resume cache
     clearProjectCache();
+    clearResumeCache();
 
     return NextResponse.json({
       success: true,

@@ -34,4 +34,9 @@ export function clearProjectCache() {
       delete cache[key];
     }
   });
+}
+
+export function clearResumeCache() {
+  // Invalidate resume cache entry
+  delete cache['/api/resume'];
 } 
