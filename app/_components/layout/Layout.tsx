@@ -5,7 +5,7 @@ const Layout = () => {
   return (
     <div className="container max-w-7xl mx-auto py-4 lg:py-8 px-4 relative">
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-2 lg:gap-16">
-        <aside className="lg:col-span-2 sticky top-4 z-50">
+        <aside className="lg:col-span-2 sticky top-8 z-50">
           <div className=" lg:block lg:sticky  lg:top-16">
             <Sidebar />
           </div>
